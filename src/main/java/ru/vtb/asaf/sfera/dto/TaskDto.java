@@ -14,16 +14,24 @@ import java.util.List;
 public class TaskDto {
     private String number;
     private String status;
-//    private List<String> label; //TODO: не список String
+    private List<Label> label;
     private Person assignee;
     private Person owner;
-    private List<CustomFieldsValues> customFieldsValues; //TODO Фильтровать по 'Стрим-заказчик' и 'Стрим-исполнитель'
+    private List<CustomFieldsValues> customFieldsValues;
     private String createDate;
     private String updateDate;
     private String dueDate;
 
     private String type;
     private String name;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Label {
+        private String name;
+    }
 
     @Data
     @Builder

@@ -1,0 +1,1 @@
+area='RDS' and streamExecutor='Антифрод' and status not in ('closed','done','rejectedByThePerformer')

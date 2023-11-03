@@ -3,6 +3,7 @@ package ru.vtb.asaf.sfera.mapper;
 import ru.vtb.asaf.sfera.dto.TaskDto;
 import ru.vtb.asaf.sfera.dto.TaskReportDto;
 
+import java.util.stream.Collectors;
 
 public final class TaskReportMapper {
 
@@ -10,12 +11,14 @@ public final class TaskReportMapper {
     private static final String STREAM_EXECUTOR = "streamExecutor";
 
     public static TaskReportDto toTaskReport(TaskDto task) {
+        String label = getLabel(task);
         String assignee = getAssignee(task);
         String owner = getOwner(task);
 
         return TaskReportDto.builder()
                 .number(getValueNotNull(task.getNumber()))
                 .status(getValueNotNull(task.getStatus()))
+                .label(label)
                 .assignee(assignee)
                 .owner(owner)
                 .streamConsumer(getValueNotNull(task.getCustomFieldsValues()
@@ -36,6 +39,18 @@ public final class TaskReportMapper {
                 .type(getValueNotNull(task.getType()))
                 .name(getValueNotNull(task.getName()))
                 .build();
+    }
+
+    private static String getLabel(TaskDto task) {
+        if (task.getLabel() == null) {
+            return "";
+        } else {
+            return task.getLabel()
+                    .stream()
+                    .map(TaskDto.Label::getName)
+                    .collect(Collectors.toList())
+                    .toString();
+        }
     }
 
     private static String getAssignee(TaskDto task) {

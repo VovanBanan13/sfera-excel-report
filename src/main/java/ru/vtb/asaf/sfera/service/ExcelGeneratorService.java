@@ -48,15 +48,16 @@ public class ExcelGeneratorService {
         style.setFont(font);
         createCell(row, 0, "Ключ РДС", style);
         createCell(row, 1, "Статус", style);
-        createCell(row, 2, "Исполнитель", style);
-        createCell(row, 3, "Владелец", style);
-        createCell(row, 4, "Стрим-заказчик", style);
-        createCell(row, 5, "Стрим-исполнитель", style);
-        createCell(row, 6, "Создано", style);
-        createCell(row, 7, "Срок исполнения", style);
-        createCell(row, 8, "Обновлено", style);
-        createCell(row, 9, "Тип", style);
-        createCell(row, 10, "Название", style);
+        createCell(row, 2, "Метки", style);
+        createCell(row, 3, "Исполнитель", style);
+        createCell(row, 4, "Владелец", style);
+        createCell(row, 5, "Стрим-заказчик", style);
+        createCell(row, 6, "Стрим-исполнитель", style);
+        createCell(row, 7, "Создано", style);
+        createCell(row, 8, "Срок исполнения", style);
+        createCell(row, 9, "Обновлено", style);
+        createCell(row, 10, "Тип", style);
+        createCell(row, 11, "Название", style);
     }
 
     private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
@@ -85,6 +86,7 @@ public class ExcelGeneratorService {
             int columnCount = 0;
             createCell(row, columnCount++, record.getNumber(), style);
             createCell(row, columnCount++, record.getStatus(), style);
+            createCell(row, columnCount++, record.getLabel(), style);
             createCell(row, columnCount++, record.getAssignee(), style);
             createCell(row, columnCount++, record.getOwner(), style);
             createCell(row, columnCount++, record.getStreamConsumer(), style);
@@ -95,7 +97,7 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, record.getType(), style);
             createCell(row, columnCount++, record.getName(), style);
             if (rowCount%50 == 0) {
-                System.out.println(String.format("Обработано %d из %d записей", rowCount, taskList.size()));
+                System.out.printf("Обработано %d из %d записей%n", rowCount, taskList.size());
             }
         }
     }
