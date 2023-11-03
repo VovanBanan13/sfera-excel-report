@@ -14,6 +14,7 @@ import ru.vtb.asaf.sfera.dto.AuthRes;
 import ru.vtb.asaf.sfera.dto.GlobalTaskDto;
 import ru.vtb.asaf.sfera.dto.QueryDto;
 import ru.vtb.asaf.sfera.dto.TaskDto;
+import ru.vtb.asaf.sfera.dto.TaskHistoryDto;
 import ru.vtb.asaf.sfera.dto.TaskReportDto;
 import ru.vtb.asaf.sfera.mapper.TaskReportMapper;
 import ru.vtb.asaf.sfera.util.Constant;
@@ -32,6 +33,7 @@ public class TaskService {
 
     RestTemplate restTemplate = new RestTemplate();
     QueryService queryService = new QueryService();
+    TaskHistoryService taskHistoryService = new TaskHistoryService();
 
 
     public List<TaskReportDto> getTasksReport(AuthRes authRes) throws URISyntaxException {
@@ -100,6 +102,7 @@ public class TaskService {
 //        System.out.println(responseEntity.getBody());
         if (responseEntity.getBody() != null) {
 //            System.out.println(TaskReportMapper.toTaskReport(responseEntity.getBody()));
+            taskHistoryService.getHistoryInfo(requestEntity, taskName);
             return TaskReportMapper.toTaskReport(responseEntity.getBody());
         }
         return null;
