@@ -28,13 +28,14 @@ public class ExcelGeneratorService {
     }
 
     public void generateExcelFile(String filename) throws IOException {
+        System.out.println("\nИдёт запись в файл: " + filename);
         writeHeader();
         write(taskList);
         FileOutputStream file = new FileOutputStream(filename);
         workbook.write(file);
         workbook.close();
         file.close();
-        System.out.println("Отчёт записан в файл: " + filename);
+        System.out.println("\nОтчёт записан в файл: " + filename);
     }
 
     private void writeHeader() {
@@ -93,6 +94,9 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, record.getUpdateDate(), style);
             createCell(row, columnCount++, record.getType(), style);
             createCell(row, columnCount++, record.getName(), style);
+            if (rowCount%50 == 0) {
+                System.out.println(String.format("Обработано %d из %d записей", rowCount, taskList.size()));
+            }
         }
     }
 

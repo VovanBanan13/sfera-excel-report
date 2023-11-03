@@ -66,27 +66,30 @@ public class TaskService {
     private List<String> getTasksByFilter(HttpEntity<String> requestEntity) throws URISyntaxException {
         List<String> taskNameList = new ArrayList<>();
         QueryDto queryDto = queryService.createQuery();
-
         UriComponents builder = UriComponentsBuilder.fromHttpUrl(Constant.TASKS_GET_URL)
                 .queryParam("query", queryDto.getQuery())
                 .queryParam("size", queryDto.getSize())
                 .queryParam("page","0")
                 .queryParam("attributesToReturn","number,name,actualSprint,priority,status,estimation,spent,assignee,owner,dueDate,updateDate,createDate")
                 .build();
-
         ResponseEntity<GlobalTaskDto> responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, requestEntity, GlobalTaskDto.class);
-
         if (responseEntity.getBody() != null) {
             responseEntity.getBody().getContent().forEach(task -> taskNameList.add(task.getNumber()));
         }
-        System.out.println("Количество задач всего: " + responseEntity.getBody().getTotalElements());
+        System.out.println("\nКоличество задач всего: " + responseEntity.getBody().getTotalElements());
         return taskNameList;
     }
 
     private List<TaskReportDto> getTasksReport(HttpEntity<String> requestEntity, List<String> taskNameList) throws URISyntaxException {
+        System.out.println("\nОжидайте, идут запросы на задачи...");
         List<TaskReportDto> taskReportDtoList = new ArrayList<>();
+        int count = 0;
         for (String taskName : taskNameList) {
+            count++;
             taskReportDtoList.add(getTaskInfo(requestEntity, taskName));
+            if (count%50 == 0) {
+                System.out.printf("Запрошено %d из %d задач%n", count, taskNameList.size());
+            }
         }
         return taskReportDtoList;
     }
