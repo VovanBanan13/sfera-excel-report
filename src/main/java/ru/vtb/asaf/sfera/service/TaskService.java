@@ -14,7 +14,6 @@ import ru.vtb.asaf.sfera.dto.AuthRes;
 import ru.vtb.asaf.sfera.dto.GlobalTaskDto;
 import ru.vtb.asaf.sfera.dto.QueryDto;
 import ru.vtb.asaf.sfera.dto.TaskDto;
-import ru.vtb.asaf.sfera.dto.TaskHistoryDto;
 import ru.vtb.asaf.sfera.dto.TaskReportDto;
 import ru.vtb.asaf.sfera.mapper.TaskReportMapper;
 import ru.vtb.asaf.sfera.util.Constant;
@@ -23,9 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -102,7 +99,7 @@ public class TaskService {
 //        System.out.println(responseEntity.getBody());
         if (responseEntity.getBody() != null) {
 //            System.out.println(TaskReportMapper.toTaskReport(responseEntity.getBody()));
-            taskHistoryService.getHistoryInfo(requestEntity, taskName);
+            taskHistoryService.getAllChangeStatus(taskHistoryService.getHistoryInfo(requestEntity, taskName));
             return TaskReportMapper.toTaskReport(responseEntity.getBody());
         }
         return null;
