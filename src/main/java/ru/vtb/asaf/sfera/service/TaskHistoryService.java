@@ -12,9 +12,14 @@ import ru.vtb.asaf.sfera.dto.TaskHistoryDto;
 import ru.vtb.asaf.sfera.util.Constant;
 
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +32,7 @@ public class TaskHistoryService {
         UriComponents builder = UriComponentsBuilder.fromHttpUrl(Constant.HISTORY_GET_URL)
                 .queryParam("size", "100")
                 .queryParam("page","0")
+                .queryParam("sort","createDate,asc")
                 .build();
         Map<String, String> variables = new HashMap<>();
         variables.put("taskName", taskName);
@@ -52,26 +58,44 @@ public class TaskHistoryService {
         if (!contentList.isEmpty()) {
             timestamp = contentList.get(0).getTimestamp();
         }
-        getChangeStatus(result, "created", timestamp);
+        getChangeStatus(result, null, timestamp);
     }
 
     public void getChangeStatus(List<TaskHistoryDto.Content> contentList, String status, String timestamp) {
-        for (TaskHistoryDto.Content content : contentList) {
-
-            if (status.equalsIgnoreCase(content.getChanges().get(0).getBefore().getValues().get(0).getValue())) {
-                String timestampContent = content.getTimestamp();
-                String afterStatus = content.getChanges().get(0).getAfter().getValues().get(0).getValue();
-                content.getChanges().get(0).getBefore().getValues().get(0).setValue("");
-                System.out.printf("%s -> %s за %s - %s\n", status, afterStatus, timestampContent, timestamp);
-                getChangeStatus(contentList, afterStatus, timestampContent);
+        if (contentList.isEmpty()) {
+            return;
+        } else {
+            for (TaskHistoryDto.Content content : contentList) {
+                if (status == null) {
+                    status = content.getChanges().get(0).getBefore().getValues().get(0).getValue();
+                }
+                if (status.equalsIgnoreCase(content.getChanges().get(0).getBefore().getValues().get(0).getValue())) {
+                    String timestampContent = content.getTimestamp();
+                    String afterStatus = content.getChanges().get(0).getAfter().getValues().get(0).getValue();
+                    content.getChanges().get(0).getBefore().getValues().get(0).setValue("");
+                    System.out.printf("%s -> %s за %s дней\n", status, afterStatus, getCompareDate(timestampContent, timestamp));
+                    getChangeStatus(contentList, afterStatus, timestampContent);
+                }
             }
         }
-
-//        getChangeStatus(contentList, contentList.get(0).getChanges().get(0).getBefore().getValues().get(0).getValue(), null);
-
     }
 
-    private void getTimeStatus(TaskHistoryDto.Content content, String status) {
-        String beforeStatus = content.getChanges().get(0).getBefore().getValues().get(0).getValue();
+    private long getCompareDate(String dateNowStr, String dateOldStr){
+        if (dateOldStr == null) {
+            return 0L;
+        }
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date dateNow = dateFormat.parse(dateNowStr);
+            Date dateOld = dateFormat.parse(dateOldStr);
+            long diff = dateNow.getTime() - dateOld.getTime();
+            System.out.println(String.format("Now date: %s | Old date %s", dateNow, dateOld));
+            System.out.println(TimeUnit.MILLISECONDS.toDays(diff));
+            return TimeUnit.MILLISECONDS.toDays(diff);
+        } catch (ParseException e) {
+            System.err.println("Не удалось распарсить дату");
+        }
+        return 0L;
     }
+
 }
