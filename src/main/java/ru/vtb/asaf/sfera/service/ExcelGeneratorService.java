@@ -56,8 +56,9 @@ public class ExcelGeneratorService {
         createCell(row, 7, "Создано", style);
         createCell(row, 8, "Срок исполнения", style);
         createCell(row, 9, "Обновлено", style);
-        createCell(row, 10, "Тип", style);
-        createCell(row, 11, "Название", style);
+        createCell(row, 10, "Смена статуса", style);
+        createCell(row, 11, "Тип", style);
+        createCell(row, 12, "Название", style);
     }
 
     private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
@@ -94,6 +95,7 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, record.getCreateDate(), style);
             createCell(row, columnCount++, record.getDueDate(), style);
             createCell(row, columnCount++, record.getUpdateDate(), style);
+            createCell(row, columnCount++, record.getStatusHistory(), style);
             createCell(row, columnCount++, record.getType(), style);
             createCell(row, columnCount++, record.getName(), style);
             if (rowCount%50 == 0) {

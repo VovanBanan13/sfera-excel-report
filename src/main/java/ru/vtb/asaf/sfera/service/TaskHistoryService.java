@@ -11,10 +11,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import ru.vtb.asaf.sfera.dto.TaskHistoryDto;
 import ru.vtb.asaf.sfera.util.Constant;
 
-import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,7 @@ public class TaskHistoryService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    public TaskHistoryDto getHistoryInfo(HttpEntity<String> requestEntity, String taskName) throws URISyntaxException {
+    public TaskHistoryDto getHistoryInfo(HttpEntity<String> requestEntity, String taskName) {
 
         UriComponents builder = UriComponentsBuilder.fromHttpUrl(Constant.HISTORY_GET_URL)
                 .queryParam("size", "100")
@@ -39,17 +39,18 @@ public class TaskHistoryService {
         ResponseEntity<TaskHistoryDto> responseEntity = restTemplate
                 .exchange(builder.toUriString(), HttpMethod.GET, requestEntity, TaskHistoryDto.class, variables);
 
-        System.out.println(taskName);
+//        System.out.println(taskName);
         return responseEntity.getBody();
     }
 
-    public void getAllChangeStatus(TaskHistoryDto history) {
+    public String getAllChangeStatus(TaskHistoryDto history) {
+        List<String> resultList = new ArrayList<>();
         var result = history.getContent()
                 .stream()
                 .filter(content -> !content.getChanges().isEmpty())
                 .filter(content -> "status".equalsIgnoreCase(content.getChanges().get(0).getCode()))
                 .collect(Collectors.toList());
-        System.out.println(result);
+//        System.out.println(result);
         List<TaskHistoryDto.Content> contentList = history.getContent().stream()
                 .filter(content -> !content.getChanges().isEmpty())
                 .filter(content -> "".equalsIgnoreCase(content.getChanges().get(0).getCode()))
@@ -58,12 +59,13 @@ public class TaskHistoryService {
         if (!contentList.isEmpty()) {
             timestamp = contentList.get(0).getTimestamp();
         }
-        getChangeStatus(result, null, timestamp);
+        return getChangeStatus(result, resultList, null, timestamp).toString();
     }
 
-    public void getChangeStatus(List<TaskHistoryDto.Content> contentList, String status, String timestamp) {
+    public List<String> getChangeStatus(List<TaskHistoryDto.Content> contentList, List<String> resultList, String status, String timestamp) {
         if (contentList.isEmpty()) {
-            return;
+            resultList.add("");
+            return resultList;
         } else {
             for (TaskHistoryDto.Content content : contentList) {
                 if (status == null) {
@@ -73,11 +75,13 @@ public class TaskHistoryService {
                     String timestampContent = content.getTimestamp();
                     String afterStatus = content.getChanges().get(0).getAfter().getValues().get(0).getValue();
                     content.getChanges().get(0).getBefore().getValues().get(0).setValue("");
-                    System.out.printf("%s -> %s за %s дней\n", status, afterStatus, getCompareDate(timestampContent, timestamp));
-                    getChangeStatus(contentList, afterStatus, timestampContent);
+                    resultList.add(String.format("%s -> %s за %s дней", status, afterStatus, getCompareDate(timestampContent, timestamp)));
+//                    System.out.printf("%s -> %s за %s дней\n", status, afterStatus, getCompareDate(timestampContent, timestamp));
+                    getChangeStatus(contentList, resultList, afterStatus, timestampContent);
                 }
             }
         }
+        return resultList;
     }
 
     private long getCompareDate(String dateNowStr, String dateOldStr){
@@ -89,8 +93,8 @@ public class TaskHistoryService {
             Date dateNow = dateFormat.parse(dateNowStr);
             Date dateOld = dateFormat.parse(dateOldStr);
             long diff = dateNow.getTime() - dateOld.getTime();
-            System.out.println(String.format("Now date: %s | Old date %s", dateNow, dateOld));
-            System.out.println(TimeUnit.MILLISECONDS.toDays(diff));
+//            System.out.println(String.format("Now date: %s | Old date %s", dateNow, dateOld));
+//            System.out.println(TimeUnit.MILLISECONDS.toDays(diff));
             return TimeUnit.MILLISECONDS.toDays(diff);
         } catch (ParseException e) {
             System.err.println("Не удалось распарсить дату");

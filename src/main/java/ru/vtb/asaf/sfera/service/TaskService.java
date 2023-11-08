@@ -62,7 +62,7 @@ public class TaskService {
 //        return taskNameList;
 //    }
 
-    private List<String> getTasksByFilter(HttpEntity<String> requestEntity) throws URISyntaxException {
+    private List<String> getTasksByFilter(HttpEntity<String> requestEntity) {
         List<String> taskNameList = new ArrayList<>();
         QueryDto queryDto = queryService.createQuery();
         UriComponents builder = UriComponentsBuilder.fromHttpUrl(Constant.TASKS_GET_URL)
@@ -99,8 +99,8 @@ public class TaskService {
 //        System.out.println(responseEntity.getBody());
         if (responseEntity.getBody() != null) {
 //            System.out.println(TaskReportMapper.toTaskReport(responseEntity.getBody()));
-            taskHistoryService.getAllChangeStatus(taskHistoryService.getHistoryInfo(requestEntity, taskName));
-            return TaskReportMapper.toTaskReport(responseEntity.getBody());
+            String statusHistory = taskHistoryService.getAllChangeStatus(taskHistoryService.getHistoryInfo(requestEntity, taskName));
+            return TaskReportMapper.toTaskReport(responseEntity.getBody(), statusHistory);
         }
         return null;
     }

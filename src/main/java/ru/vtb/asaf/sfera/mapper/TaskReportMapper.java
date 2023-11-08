@@ -10,7 +10,7 @@ public final class TaskReportMapper {
     private static final String STREAM_CONSUMER = "streamConsumer";
     private static final String STREAM_EXECUTOR = "streamExecutor";
 
-    public static TaskReportDto toTaskReport(TaskDto task) {
+    public static TaskReportDto toTaskReport(TaskDto task, String statusHistory) {
         String label = getLabel(task);
         String assignee = getAssignee(task);
         String owner = getOwner(task);
@@ -36,6 +36,7 @@ public final class TaskReportMapper {
                 .createDate(getValueNotNull(task.getCreateDate()))
                 .updateDate(getValueNotNull(task.getUpdateDate()))
                 .dueDate(getValueNotNull(task.getDueDate()))
+                .statusHistory(statusHistory)
                 .type(getValueNotNull(task.getType()))
                 .name(getValueNotNull(task.getName()))
                 .build();
