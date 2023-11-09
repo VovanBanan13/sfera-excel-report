@@ -13,10 +13,12 @@ public class TaskReportDto {
     private String number;
     private String status;
     private String label;
+    private String component;
     private String assignee;
     private String owner;
     private String streamConsumer;
     private String streamExecutor;
+    private String projectConsumer;
     private String createDate;
     private String updateDate;
     private String dueDate;

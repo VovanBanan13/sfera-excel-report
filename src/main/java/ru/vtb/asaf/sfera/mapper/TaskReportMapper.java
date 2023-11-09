@@ -10,8 +10,9 @@ public final class TaskReportMapper {
     private static final String STREAM_CONSUMER = "streamConsumer";
     private static final String STREAM_EXECUTOR = "streamExecutor";
 
-    public static TaskReportDto toTaskReport(TaskDto task, String statusHistory) {
+    public static TaskReportDto toTaskReport(TaskDto task, String statusHistory, String projectConsumer) {
         String label = getLabel(task);
+        String component = getComponent(task);
         String assignee = getAssignee(task);
         String owner = getOwner(task);
 
@@ -19,6 +20,7 @@ public final class TaskReportMapper {
                 .number(getValueNotNull(task.getNumber()))
                 .status(getValueNotNull(task.getStatus()))
                 .label(label)
+                .component(component)
                 .assignee(assignee)
                 .owner(owner)
                 .streamConsumer(getValueNotNull(task.getCustomFieldsValues()
@@ -33,6 +35,7 @@ public final class TaskReportMapper {
                         .map(TaskDto.CustomFieldsValues::getValue)
                         .findFirst()
                         .orElse(null)))
+                .projectConsumer(projectConsumer)
                 .createDate(getValueNotNull(task.getCreateDate()))
                 .updateDate(getValueNotNull(task.getUpdateDate()))
                 .dueDate(getValueNotNull(task.getDueDate()))
@@ -47,6 +50,18 @@ public final class TaskReportMapper {
             return "";
         } else {
             return task.getLabel()
+                    .stream()
+                    .map(TaskDto.Label::getName)
+                    .collect(Collectors.toList())
+                    .toString();
+        }
+    }
+
+    private static String getComponent(TaskDto task) {
+        if (task.getComponent() == null) {
+            return "";
+        } else {
+            return task.getComponent()
                     .stream()
                     .map(TaskDto.Label::getName)
                     .collect(Collectors.toList())

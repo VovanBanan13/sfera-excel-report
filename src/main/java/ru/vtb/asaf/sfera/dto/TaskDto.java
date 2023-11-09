@@ -15,6 +15,7 @@ public class TaskDto {
     private String number;
     private String status;
     private List<Label> label;
+    private List<Label> component;
     private Person assignee;
     private Person owner;
     private List<CustomFieldsValues> customFieldsValues;

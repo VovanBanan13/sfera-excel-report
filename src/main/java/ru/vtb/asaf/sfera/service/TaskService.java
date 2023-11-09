@@ -31,6 +31,7 @@ public class TaskService {
     RestTemplate restTemplate = new RestTemplate();
     QueryService queryService = new QueryService();
     TaskHistoryService taskHistoryService = new TaskHistoryService();
+    ProjectConsumerService projectConsumerService = new ProjectConsumerService();
 
 
     public List<TaskReportDto> getTasksReport(AuthRes authRes) throws URISyntaxException {
@@ -100,7 +101,8 @@ public class TaskService {
         if (responseEntity.getBody() != null) {
 //            System.out.println(TaskReportMapper.toTaskReport(responseEntity.getBody()));
             String statusHistory = taskHistoryService.getAllChangeStatus(taskHistoryService.getHistoryInfo(requestEntity, taskName));
-            return TaskReportMapper.toTaskReport(responseEntity.getBody(), statusHistory);
+            String projectConsumer = projectConsumerService.getProjectConsumerName(requestEntity, responseEntity.getBody());
+            return TaskReportMapper.toTaskReport(responseEntity.getBody(), statusHistory, projectConsumer);
         }
         return null;
     }
