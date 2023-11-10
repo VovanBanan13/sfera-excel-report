@@ -61,6 +61,7 @@ public class ExcelGeneratorService {
         createCell(row, 12, "Смена статуса", style);
         createCell(row, 13, "Тип", style);
         createCell(row, 14, "Название", style);
+        createCell(row, 15, "Эпик", style);
     }
 
     private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
@@ -102,6 +103,7 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, record.getStatusHistory(), style);
             createCell(row, columnCount++, record.getType(), style);
             createCell(row, columnCount++, record.getName(), style);
+            createCell(row, columnCount++, record.getEpic(), style);
             if (rowCount%50 == 0) {
                 System.out.printf("Обработано %d из %d записей%n", rowCount, taskList.size());
             }

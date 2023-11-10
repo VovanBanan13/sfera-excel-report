@@ -32,6 +32,7 @@ public class TaskService {
     QueryService queryService = new QueryService();
     TaskHistoryService taskHistoryService = new TaskHistoryService();
     ProjectConsumerService projectConsumerService = new ProjectConsumerService();
+    EpicService epicService = new EpicService();
 
 
     public List<TaskReportDto> getTasksReport(AuthRes authRes) throws URISyntaxException {
@@ -102,7 +103,8 @@ public class TaskService {
 //            System.out.println(TaskReportMapper.toTaskReport(responseEntity.getBody()));
             String statusHistory = taskHistoryService.getAllChangeStatus(taskHistoryService.getHistoryInfo(requestEntity, taskName));
             String projectConsumer = projectConsumerService.getProjectConsumerName(requestEntity, responseEntity.getBody());
-            return TaskReportMapper.toTaskReport(responseEntity.getBody(), statusHistory, projectConsumer);
+            String epicNumber = epicService.getEpicNumber(requestEntity, taskName);
+            return TaskReportMapper.toTaskReport(responseEntity.getBody(), statusHistory, projectConsumer, epicNumber);
         }
         return null;
     }

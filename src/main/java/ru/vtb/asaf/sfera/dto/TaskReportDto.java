@@ -25,5 +25,6 @@ public class TaskReportDto {
     private String statusHistory;
     private String type;
     private String name;
+    private String epic;
 
 }

@@ -10,7 +10,12 @@ public final class TaskReportMapper {
     private static final String STREAM_CONSUMER = "streamConsumer";
     private static final String STREAM_EXECUTOR = "streamExecutor";
 
-    public static TaskReportDto toTaskReport(TaskDto task, String statusHistory, String projectConsumer) {
+    public static TaskReportDto toTaskReport(
+            TaskDto task,
+            String statusHistory,
+            String projectConsumer,
+            String epicNumber
+    ) {
         String label = getLabel(task);
         String component = getComponent(task);
         String assignee = getAssignee(task);
@@ -42,6 +47,7 @@ public final class TaskReportMapper {
                 .statusHistory(statusHistory)
                 .type(getValueNotNull(task.getType()))
                 .name(getValueNotNull(task.getName()))
+                .epic(epicNumber)
                 .build();
     }
 

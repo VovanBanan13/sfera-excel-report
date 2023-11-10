@@ -8,6 +8,7 @@ public class Constant {
     public final static String TASK_GET_URL = "https://sfera.inno.local/app/tasks/api/v0.1/entities/";
     public final static String HISTORY_GET_URL = "https://sfera.inno.local/app/tasks/api/v0.1/entities/{taskName}/history";
     public final static String PROJECT_CONSUMER_GET_URL = "https://sfera.inno.local/app/tasks/api/v0.1/records/{projectConsumer}";
+    public final static String PARENT_CHAIN_GET_URL = "https://sfera.inno.local/app/tasks/api/v0.1/entities/{taskName}/parents-chain\n";
 
     public final static String HISTORY_GET_FULL_URL = "https://sfera.inno.local/app/tasks/api/v0.1/entities/RDS-152081/history?page=0&size=7&sort=createDate,desc";
 }
