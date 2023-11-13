@@ -114,13 +114,14 @@ public class TaskService {
     private String getRdsFromEpic(HttpEntity<String> requestEntity, String taskName) throws URISyntaxException {
         ResponseEntity<TaskDto> responseEntity = restTemplate.exchange(new URI(Constant.TASK_GET_URL+taskName), HttpMethod.GET, requestEntity, TaskDto.class);
         if (responseEntity.getBody() != null) {
-            return responseEntity.getBody().getRelatedEntities()
-                    .stream()
-                    .filter(entity -> "rds".equalsIgnoreCase(entity.getEntity().getType()))
-                    .map(entity -> entity.getEntity().getNumber())
-                    .collect(Collectors.toList()).toString();
-        } else {
-            return "";
+            if (responseEntity.getBody().getRelatedEntities() != null) {
+                return responseEntity.getBody().getRelatedEntities()
+                        .stream()
+                        .filter(entity -> "rds".equalsIgnoreCase(entity.getEntity().getType()))
+                        .map(entity -> entity.getEntity().getNumber())
+                        .collect(Collectors.toList()).toString();
+            }
         }
+        return "";
     }
 }
