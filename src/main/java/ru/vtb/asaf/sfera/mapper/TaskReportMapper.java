@@ -14,7 +14,8 @@ public final class TaskReportMapper {
             TaskDto task,
             String statusHistory,
             String projectConsumer,
-            String epicNumber
+            String epicNumber,
+            String taskInEpic
     ) {
         String label = getLabel(task);
         String component = getComponent(task);
@@ -48,6 +49,7 @@ public final class TaskReportMapper {
                 .type(getValueNotNull(task.getType()))
                 .name(getValueNotNull(task.getName()))
                 .epic(epicNumber)
+                .taskInEpic(taskInEpic)
                 .build();
     }
 
@@ -69,7 +71,7 @@ public final class TaskReportMapper {
         } else {
             return task.getComponent()
                     .stream()
-                    .map(TaskDto.Label::getName)
+                    .map(TaskDto.Component::getName)
                     .collect(Collectors.toList())
                     .toString();
         }

@@ -15,14 +15,14 @@ public class TaskDto {
     private String number;
     private String status;
     private List<Label> label;
-    private List<Label> component;
+    private List<Component> component;
     private Person assignee;
     private Person owner;
     private List<CustomFieldsValues> customFieldsValues;
     private String createDate;
     private String updateDate;
     private String dueDate;
-
+    private List<RelatedEntity> relatedEntities;
     private String type;
     private String name;
 
@@ -32,6 +32,31 @@ public class TaskDto {
     @AllArgsConstructor
     public static class Label {
         private String name;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Component {
+        private String name;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RelatedEntity {
+        private Entity entity;
+
+        @Data
+        @Builder
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class Entity {
+            private String number;
+            private String type;
+        }
     }
 
     @Data
