@@ -107,6 +107,7 @@ public class TaskService {
             TaskHistoryDto taskHistoryDto = taskHistoryService.getHistoryInfo(requestEntity, taskName);
             Map<String, String> statusHistory = taskHistoryService.getAllChangeStatus(taskHistoryDto);
             String dueDateHistory = taskHistoryService.getAllChangeDueDate(taskHistoryDto);
+            String assigneeHistory = taskHistoryService.getAllChangeAssignee(taskHistoryDto);
             String projectConsumer = projectConsumerService.getProjectConsumerName(requestEntity, responseEntity.getBody());
             String epicNumber = epicService.getEpicNumber(requestEntity, taskName);
             String taskInEpic = getRdsFromEpic(requestEntity, epicNumber);
@@ -115,6 +116,7 @@ public class TaskService {
                             responseEntity.getBody(),
                             statusHistory,
                             dueDateHistory,
+                            assigneeHistory,
                             projectConsumer,
                             epicNumber,
                             taskInEpic);

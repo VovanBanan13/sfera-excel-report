@@ -15,6 +15,7 @@ public class TaskReportDto {
     private String label;
     private String component;
     private String assignee;
+    private String assigneeHistory;
     private String owner;
     private String streamConsumer;
     private String streamExecutor;

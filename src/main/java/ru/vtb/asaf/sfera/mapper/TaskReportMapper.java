@@ -20,6 +20,7 @@ public final class TaskReportMapper {
             TaskDto task,
             Map<String, String> statusHistory,
             String dueDateHistory,
+            String assigneeHistory,
             String projectConsumer,
             String epicNumber,
             String taskInEpic
@@ -35,6 +36,7 @@ public final class TaskReportMapper {
                 .label(label)
                 .component(component)
                 .assignee(assignee)
+                .assigneeHistory(assigneeHistory)
                 .owner(owner)
                 .streamConsumer(getValueNotNull(task.getCustomFieldsValues()
                         .stream()

@@ -51,23 +51,24 @@ public class ExcelGeneratorService {
         createCell(row, 2, "Метки", style);
         createCell(row, 3, "Компоненты", style);
         createCell(row, 4, "Исполнитель", style);
-        createCell(row, 5, "Владелец", style);
-        createCell(row, 6, "Стрим-заказчик", style);
-        createCell(row, 7, "Стрим-исполнитель", style);
-        createCell(row, 8, "Проект-заказчик", style);
-        createCell(row, 9, "Создано", style);
-        createCell(row, 10, "Срок исполнения", style);
-        createCell(row, 11, "Смена срока исполнения", style);
-        createCell(row, 12, "Обновлено", style);
-        createCell(row, 13, "Смена статуса", style);
-        createCell(row, 14, "Создано", style);
-        createCell(row, 15, "В работе", style);
-        createCell(row, 16, "Анализ", style);
-        createCell(row, 17, "Тестирование", style);
-        createCell(row, 18, "Тип", style);
-        createCell(row, 19, "Название", style);
-        createCell(row, 20, "Эпик", style);
-        createCell(row, 21, "Задачи эпика", style);
+        createCell(row, 5, "Смена исполнителя", style);
+        createCell(row, 6, "Владелец", style);
+        createCell(row, 7, "Стрим-заказчик", style);
+        createCell(row, 8, "Стрим-исполнитель", style);
+        createCell(row, 9, "Проект-заказчик", style);
+        createCell(row, 10, "Создано", style);
+        createCell(row, 11, "Срок исполнения", style);
+        createCell(row, 12, "Смена срока исполнения", style);
+        createCell(row, 13, "Обновлено", style);
+        createCell(row, 14, "Смена статуса", style);
+        createCell(row, 15, "Создано", style);
+        createCell(row, 16, "В работе", style);
+        createCell(row, 17, "Анализ", style);
+        createCell(row, 18, "Тестирование", style);
+        createCell(row, 19, "Тип", style);
+        createCell(row, 20, "Название", style);
+        createCell(row, 21, "Эпик", style);
+        createCell(row, 22, "Задачи эпика", style);
     }
 
     private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
@@ -99,6 +100,7 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, record.getLabel(), style);
             createCell(row, columnCount++, record.getComponent(), style);
             createCell(row, columnCount++, record.getAssignee(), style);
+            createCell(row, columnCount++, record.getAssigneeHistory(), style);
             createCell(row, columnCount++, record.getOwner(), style);
             createCell(row, columnCount++, record.getStreamConsumer(), style);
             createCell(row, columnCount++, record.getStreamExecutor(), style);

@@ -66,6 +66,29 @@ public class TaskHistoryService {
         return resultList.toString();
     }
 
+    public String getAllChangeAssignee(TaskHistoryDto history) {
+        List<String> resultList = new ArrayList<>();
+        var result = history.getContent()
+                .stream()
+                .filter(content -> !content.getChanges().isEmpty())
+                .filter(content -> "assignee".equalsIgnoreCase(content.getChanges().get(0).getCode()))
+                .collect(Collectors.toList());
+        if (result.isEmpty()) {
+            resultList.add("");
+            return resultList.toString();
+        } else {
+            for (TaskHistoryDto.Content content : result) {
+                String beforeAssignee = "null";
+                try {
+                    beforeAssignee = content.getChanges().get(0).getBefore().getValues().get(0).getValue();
+                } catch (NullPointerException ignored) {}
+                String afterAssignee = content.getChanges().get(0).getAfter().getValues().get(0).getValue();
+                resultList.add(String.format("%s -> %s", beforeAssignee, afterAssignee));
+            }
+        }
+        return resultList.toString();
+    }
+
     public Map<String, String> getAllChangeStatus(TaskHistoryDto history) {
         Map<String, String> resultList = new HashMap<>();
         var result = history.getContent()
