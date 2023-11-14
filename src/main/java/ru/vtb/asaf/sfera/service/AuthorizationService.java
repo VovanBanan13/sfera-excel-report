@@ -31,6 +31,7 @@ public class AuthorizationService {
             return response.getBody();
         } catch (HttpClientErrorException e) {
             System.err.println("Invalid login or password");
+            authorization();
             return null;
         }
 

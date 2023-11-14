@@ -3,6 +3,12 @@ package ru.vtb.asaf.sfera.mapper;
 import ru.vtb.asaf.sfera.dto.TaskDto;
 import ru.vtb.asaf.sfera.dto.TaskReportDto;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public final class TaskReportMapper {
@@ -45,12 +51,39 @@ public final class TaskReportMapper {
                 .createDate(getValueNotNull(task.getCreateDate()))
                 .updateDate(getValueNotNull(task.getUpdateDate()))
                 .dueDate(getValueNotNull(task.getDueDate()))
-                .statusHistory(statusHistory)
+                .statusHistory(getDateTimeAfterCreate(statusHistory, getValueNotNull(task.getCreateDate())))
                 .type(getValueNotNull(task.getType()))
                 .name(getValueNotNull(task.getName()))
                 .epic(epicNumber)
                 .taskInEpic(taskInEpic)
                 .build();
+    }
+
+    private static String getDateTimeAfterCreate(String statusHistory, String createDate) {
+        if (!"[]".equals(statusHistory)) {
+            return statusHistory;
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date now = new Date();
+            String currentDate = dateFormat.format(now);
+            return String.format("создано %s дней назад", getCompareDate(currentDate, createDate));
+        }
+    }
+
+    private static long getCompareDate(String dateNowStr, String dateOldStr){
+        if (dateOldStr == null) {
+            return 0L;
+        }
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date dateNow = dateFormat.parse(dateNowStr);
+            Date dateOld = dateFormat.parse(dateOldStr);
+            long diff = dateNow.getTime() - dateOld.getTime();
+            return TimeUnit.MILLISECONDS.toDays(diff);
+        } catch (ParseException e) {
+            System.err.println("Не удалось распарсить дату");
+        }
+        return 0L;
     }
 
     private static String getLabel(TaskDto task) {
