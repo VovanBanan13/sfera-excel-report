@@ -14,6 +14,7 @@ import ru.vtb.asaf.sfera.dto.AuthRes;
 import ru.vtb.asaf.sfera.dto.GlobalTaskDto;
 import ru.vtb.asaf.sfera.dto.QueryDto;
 import ru.vtb.asaf.sfera.dto.TaskDto;
+import ru.vtb.asaf.sfera.dto.TaskHistoryDto;
 import ru.vtb.asaf.sfera.dto.TaskReportDto;
 import ru.vtb.asaf.sfera.mapper.TaskReportMapper;
 import ru.vtb.asaf.sfera.util.Constant;
@@ -103,11 +104,20 @@ public class TaskService {
 //        System.out.println(responseEntity.getBody());
         if (responseEntity.getBody() != null) {
 //            System.out.println(TaskReportMapper.toTaskReport(responseEntity.getBody()));
-            Map<String, String> statusHistory = taskHistoryService.getAllChangeStatus(taskHistoryService.getHistoryInfo(requestEntity, taskName));
+            TaskHistoryDto taskHistoryDto = taskHistoryService.getHistoryInfo(requestEntity, taskName);
+            Map<String, String> statusHistory = taskHistoryService.getAllChangeStatus(taskHistoryDto);
+            String dueDateHistory = taskHistoryService.getAllChangeDueDate(taskHistoryDto);
             String projectConsumer = projectConsumerService.getProjectConsumerName(requestEntity, responseEntity.getBody());
             String epicNumber = epicService.getEpicNumber(requestEntity, taskName);
             String taskInEpic = getRdsFromEpic(requestEntity, epicNumber);
-            return TaskReportMapper.toTaskReport(responseEntity.getBody(), statusHistory, projectConsumer, epicNumber, taskInEpic);
+            return TaskReportMapper
+                    .toTaskReport(
+                            responseEntity.getBody(),
+                            statusHistory,
+                            dueDateHistory,
+                            projectConsumer,
+                            epicNumber,
+                            taskInEpic);
         }
         return null;
     }

@@ -22,6 +22,7 @@ public class TaskReportDto {
     private String createDate;
     private String updateDate;
     private String dueDate;
+    private String dueDateHistory;
     private String statusHistory;
     private String statusCreated;
     private String statusInProgress;

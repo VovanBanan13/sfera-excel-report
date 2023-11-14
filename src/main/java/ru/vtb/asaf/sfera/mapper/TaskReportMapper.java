@@ -19,6 +19,7 @@ public final class TaskReportMapper {
     public static TaskReportDto toTaskReport(
             TaskDto task,
             Map<String, String> statusHistory,
+            String dueDateHistory,
             String projectConsumer,
             String epicNumber,
             String taskInEpic
@@ -51,6 +52,7 @@ public final class TaskReportMapper {
                 .createDate(getValueNotNull(task.getCreateDate()))
                 .updateDate(getValueNotNull(task.getUpdateDate()))
                 .dueDate(getValueNotNull(task.getDueDate()))
+                .dueDateHistory(dueDateHistory)
                 .statusHistory(getDateTimeAfterCreate(statusHistory.toString(), getValueNotNull(task.getCreateDate())))
                 .statusCreated(getNumber(getValueNotNull(statusHistory.get("created"))))
                 .statusInProgress(getNumber(getValueNotNull(statusHistory.get("inProgress"))))

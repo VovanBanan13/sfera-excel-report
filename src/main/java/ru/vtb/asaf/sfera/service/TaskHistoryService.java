@@ -14,6 +14,7 @@ import ru.vtb.asaf.sfera.util.Constant;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,29 @@ public class TaskHistoryService {
         return responseEntity.getBody();
     }
 
+    public String getAllChangeDueDate(TaskHistoryDto history) {
+        List<String> resultList = new ArrayList<>();
+        var result = history.getContent()
+                .stream()
+                .filter(content -> !content.getChanges().isEmpty())
+                .filter(content -> "dueDate".equalsIgnoreCase(content.getChanges().get(0).getCode()))
+                .collect(Collectors.toList());
+        if (result.isEmpty()) {
+            resultList.add("");
+            return resultList.toString();
+        } else {
+            for (TaskHistoryDto.Content content : result) {
+                String beforeDate = "null";
+                try {
+                    beforeDate = content.getChanges().get(0).getBefore().getValues().get(0).getValue();
+                } catch (NullPointerException ignored) {}
+                String afterDate = content.getChanges().get(0).getAfter().getValues().get(0).getValue();
+                resultList.add(String.format("%s -> %s", beforeDate, afterDate));
+            }
+        }
+        return resultList.toString();
+    }
+
     public Map<String, String> getAllChangeStatus(TaskHistoryDto history) {
         Map<String, String> resultList = new HashMap<>();
         var result = history.getContent()
@@ -61,7 +85,7 @@ public class TaskHistoryService {
         return getChangeStatus(result, resultList, null, timestamp);
     }
 
-    public Map<String, String> getChangeStatus(List<TaskHistoryDto.Content> contentList, Map<String, String> resultList, String status, String timestamp) {
+    private Map<String, String> getChangeStatus(List<TaskHistoryDto.Content> contentList, Map<String, String> resultList, String status, String timestamp) {
         if (contentList.isEmpty()) {
             resultList.put("", "");
             return resultList;
