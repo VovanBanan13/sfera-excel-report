@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -102,7 +103,7 @@ public class TaskService {
 //        System.out.println(responseEntity.getBody());
         if (responseEntity.getBody() != null) {
 //            System.out.println(TaskReportMapper.toTaskReport(responseEntity.getBody()));
-            String statusHistory = taskHistoryService.getAllChangeStatus(taskHistoryService.getHistoryInfo(requestEntity, taskName));
+            Map<String, String> statusHistory = taskHistoryService.getAllChangeStatus(taskHistoryService.getHistoryInfo(requestEntity, taskName));
             String projectConsumer = projectConsumerService.getProjectConsumerName(requestEntity, responseEntity.getBody());
             String epicNumber = epicService.getEpicNumber(requestEntity, taskName);
             String taskInEpic = getRdsFromEpic(requestEntity, epicNumber);

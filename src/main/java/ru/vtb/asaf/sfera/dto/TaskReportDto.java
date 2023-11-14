@@ -23,6 +23,10 @@ public class TaskReportDto {
     private String updateDate;
     private String dueDate;
     private String statusHistory;
+    private String statusCreated;
+    private String statusInProgress;
+    private String statusAnalyze;
+    private String statusTesting;
     private String type;
     private String name;
     private String epic;

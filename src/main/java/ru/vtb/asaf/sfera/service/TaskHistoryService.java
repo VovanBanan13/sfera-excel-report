@@ -14,7 +14,6 @@ import ru.vtb.asaf.sfera.util.Constant;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,8 +42,8 @@ public class TaskHistoryService {
         return responseEntity.getBody();
     }
 
-    public String getAllChangeStatus(TaskHistoryDto history) {
-        List<String> resultList = new ArrayList<>();
+    public Map<String, String> getAllChangeStatus(TaskHistoryDto history) {
+        Map<String, String> resultList = new HashMap<>();
         var result = history.getContent()
                 .stream()
                 .filter(content -> !content.getChanges().isEmpty())
@@ -59,12 +58,12 @@ public class TaskHistoryService {
         if (!contentList.isEmpty()) {
             timestamp = contentList.get(0).getTimestamp();
         }
-        return getChangeStatus(result, resultList, null, timestamp).toString();
+        return getChangeStatus(result, resultList, null, timestamp);
     }
 
-    public List<String> getChangeStatus(List<TaskHistoryDto.Content> contentList, List<String> resultList, String status, String timestamp) {
+    public Map<String, String> getChangeStatus(List<TaskHistoryDto.Content> contentList, Map<String, String> resultList, String status, String timestamp) {
         if (contentList.isEmpty()) {
-            resultList.add("");
+            resultList.put("", "");
             return resultList;
         } else {
             for (TaskHistoryDto.Content content : contentList) {
@@ -75,7 +74,7 @@ public class TaskHistoryService {
                     String timestampContent = content.getTimestamp();
                     String afterStatus = content.getChanges().get(0).getAfter().getValues().get(0).getValue();
                     content.getChanges().get(0).getBefore().getValues().get(0).setValue("");
-                    resultList.add(String.format("%s -> %s за %s дней", status, afterStatus, getCompareDate(timestampContent, timestamp)));
+                    resultList.put(status, String.format("%s -> %s за %s дней", status, afterStatus, getCompareDate(timestampContent, timestamp)));
 //                    System.out.printf("%s -> %s за %s дней\n", status, afterStatus, getCompareDate(timestampContent, timestamp));
                     getChangeStatus(contentList, resultList, afterStatus, timestampContent);
                 }

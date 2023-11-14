@@ -6,8 +6,8 @@ import ru.vtb.asaf.sfera.dto.TaskReportDto;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -18,7 +18,7 @@ public final class TaskReportMapper {
 
     public static TaskReportDto toTaskReport(
             TaskDto task,
-            String statusHistory,
+            Map<String, String> statusHistory,
             String projectConsumer,
             String epicNumber,
             String taskInEpic
@@ -51,7 +51,11 @@ public final class TaskReportMapper {
                 .createDate(getValueNotNull(task.getCreateDate()))
                 .updateDate(getValueNotNull(task.getUpdateDate()))
                 .dueDate(getValueNotNull(task.getDueDate()))
-                .statusHistory(getDateTimeAfterCreate(statusHistory, getValueNotNull(task.getCreateDate())))
+                .statusHistory(getDateTimeAfterCreate(statusHistory.toString(), getValueNotNull(task.getCreateDate())))
+                .statusCreated(getNumber(getValueNotNull(statusHistory.get("created"))))
+                .statusInProgress(getNumber(getValueNotNull(statusHistory.get("inProgress"))))
+                .statusAnalyze(getNumber(getValueNotNull(statusHistory.get("analysis"))))
+                .statusTesting(getNumber(getValueNotNull(statusHistory.get("testing"))))
                 .type(getValueNotNull(task.getType()))
                 .name(getValueNotNull(task.getName()))
                 .epic(epicNumber)
@@ -142,5 +146,9 @@ public final class TaskReportMapper {
         } else {
             return "";
         }
+    }
+
+    private static String getNumber(String value) {
+        return value.replaceAll("\\D", "");
     }
 }

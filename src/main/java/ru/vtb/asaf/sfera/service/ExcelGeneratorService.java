@@ -59,10 +59,14 @@ public class ExcelGeneratorService {
         createCell(row, 10, "Срок исполнения", style);
         createCell(row, 11, "Обновлено", style);
         createCell(row, 12, "Смена статуса", style);
-        createCell(row, 13, "Тип", style);
-        createCell(row, 14, "Название", style);
-        createCell(row, 15, "Эпик", style);
-        createCell(row, 16, "Задачи эпика", style);
+        createCell(row, 13, "Создано", style);
+        createCell(row, 14, "В работе", style);
+        createCell(row, 15, "Анализ", style);
+        createCell(row, 16, "Тестирование", style);
+        createCell(row, 17, "Тип", style);
+        createCell(row, 18, "Название", style);
+        createCell(row, 19, "Эпик", style);
+        createCell(row, 20, "Задачи эпика", style);
     }
 
     private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
@@ -102,6 +106,10 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, record.getDueDate(), style);
             createCell(row, columnCount++, record.getUpdateDate(), style);
             createCell(row, columnCount++, record.getStatusHistory(), style);
+            createCell(row, columnCount++, record.getStatusCreated(), style);
+            createCell(row, columnCount++, record.getStatusInProgress(), style);
+            createCell(row, columnCount++, record.getStatusAnalyze(), style);
+            createCell(row, columnCount++, record.getStatusTesting(), style);
             createCell(row, columnCount++, record.getType(), style);
             createCell(row, columnCount++, record.getName(), style);
             createCell(row, columnCount++, record.getEpic(), style);
