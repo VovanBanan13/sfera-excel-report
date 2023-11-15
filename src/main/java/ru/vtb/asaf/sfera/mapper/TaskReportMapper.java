@@ -70,7 +70,7 @@ public final class TaskReportMapper {
     }
 
     private static String getDateTimeAfterCreate(String statusHistory, String createDate) {
-        if (!"[]".equals(statusHistory)) {
+        if (!"{=}".equals(statusHistory)) {
             return statusHistory;
         } else {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");

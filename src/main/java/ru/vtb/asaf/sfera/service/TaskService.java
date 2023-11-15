@@ -91,7 +91,7 @@ public class TaskService {
         for (String taskName : taskNameList) {
             count++;
             taskReportDtoList.add(getTaskInfo(requestEntity, taskName));
-            if (count%50 == 0) {
+            if (count%10 == 0) {
                 System.out.printf("Запрошено %d из %d задач%n", count, taskNameList.size());
             }
         }

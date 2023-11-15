@@ -56,10 +56,13 @@ public class TaskHistoryService {
         } else {
             for (TaskHistoryDto.Content content : result) {
                 String beforeDate = "null";
+                String afterDate = "null";
                 try {
                     beforeDate = content.getChanges().get(0).getBefore().getValues().get(0).getValue();
                 } catch (NullPointerException ignored) {}
-                String afterDate = content.getChanges().get(0).getAfter().getValues().get(0).getValue();
+                try {
+                    afterDate = content.getChanges().get(0).getAfter().getValues().get(0).getValue();
+                } catch (NullPointerException ignored) {}
                 resultList.add(String.format("%s -> %s", beforeDate, afterDate));
             }
         }
@@ -90,10 +93,13 @@ public class TaskHistoryService {
         } else {
             for (TaskHistoryDto.Content content : result) {
                 String beforeAssignee = "null";
+                String afterAssignee = "null";
                 try {
                     beforeAssignee = content.getChanges().get(0).getBefore().getValues().get(0).getValue();
                 } catch (NullPointerException ignored) {}
-                String afterAssignee = content.getChanges().get(0).getAfter().getValues().get(0).getValue();
+                try {
+                    afterAssignee = content.getChanges().get(0).getAfter().getValues().get(0).getValue();
+                } catch (NullPointerException ignored) {}
                 resultList.add(String.format("%s -> %s", beforeAssignee, afterAssignee));
             }
         }

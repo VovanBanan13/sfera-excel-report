@@ -46,7 +46,7 @@ public class ExcelGeneratorService {
         font.setBold(true);
         font.setFontHeight(16);
         style.setFont(font);
-        createCell(row, 0, "Ключ РДС", style);
+        createCell(row, 0, "Номер задачи", style);
         createCell(row, 1, "Статус", style);
         createCell(row, 2, "Метки", style);
         createCell(row, 3, "Компоненты", style);
@@ -69,7 +69,7 @@ public class ExcelGeneratorService {
         createCell(row, 20, "Тип", style);
         createCell(row, 21, "Название", style);
         createCell(row, 22, "Эпик", style);
-        createCell(row, 23, "Задачи эпика", style);
+        createCell(row, 23, "RDS эпика", style);
     }
 
     private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
@@ -120,7 +120,7 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, record.getName(), style);
             createCell(row, columnCount++, record.getEpic(), style);
             createCell(row, columnCount++, record.getTaskInEpic(), style);
-            if (rowCount%50 == 0) {
+            if (rowCount%10 == 0) {
                 System.out.printf("Обработано %d из %d записей%n", rowCount, taskList.size());
             }
         }

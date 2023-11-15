@@ -25,9 +25,15 @@ public class Runner implements CommandLineRunner {
 
 
         AuthRes authRes = authorizationService.authorization();
+
+        long startTime = System.currentTimeMillis();
+
         List<TaskReportDto> list = taskService.getTasksReport(authRes);
         ExcelGeneratorService excelGeneratorService = new ExcelGeneratorService(list);
         excelGeneratorService.generateExcelFile(fileName);
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("\nПроцесс занял " + Math.round((endTime - startTime)/60000) + " минут");
 
         System.out.println("\n\n*** Завершение работы приложения ***\n");
         System.exit(0);
