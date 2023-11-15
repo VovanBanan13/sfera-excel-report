@@ -66,6 +66,17 @@ public class TaskHistoryService {
         return resultList.toString();
     }
 
+    public String getEndDate(TaskHistoryDto history) {
+        return history.getContent()
+                .stream()
+                .filter(content -> !content.getChanges().isEmpty())
+                .filter(content -> "status".equalsIgnoreCase(content.getChanges().get(0).getCode()))
+                .filter(content -> "closed".equalsIgnoreCase(content.getChanges().get(0).getAfter().getValues().get(0).getValue()))
+                .map(TaskHistoryDto.Content::getTimestamp)
+                .findFirst()
+                .orElse("");
+    }
+
     public String getAllChangeAssignee(TaskHistoryDto history) {
         List<String> resultList = new ArrayList<>();
         var result = history.getContent()
