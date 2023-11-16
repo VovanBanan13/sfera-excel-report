@@ -66,10 +66,15 @@ public class ExcelGeneratorService {
         createCell(row, 17, "В работе", style);
         createCell(row, 18, "Анализ", style);
         createCell(row, 19, "Тестирование", style);
-        createCell(row, 20, "Тип", style);
-        createCell(row, 21, "Название", style);
-        createCell(row, 22, "Эпик", style);
-        createCell(row, 23, "RDS эпика", style);
+        createCell(row, 20, "В ожидании", style);
+        createCell(row, 21, "В очереди", style);
+        createCell(row, 22, "Выполнено", style);
+        createCell(row, 23, "Закрыто", style);
+        createCell(row, 24, "Тип", style);
+        createCell(row, 25, "Название", style);
+        createCell(row, 26, "Эпик", style);
+        createCell(row, 27, "Проект эпика", style);
+        createCell(row, 28, "RDS эпика", style);
     }
 
     private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
@@ -116,9 +121,14 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, record.getStatusInProgress(), style);
             createCell(row, columnCount++, record.getStatusAnalyze(), style);
             createCell(row, columnCount++, record.getStatusTesting(), style);
+            createCell(row, columnCount++, record.getStatusWaiting(), style);
+            createCell(row, columnCount++, record.getStatusOnTheQueue(), style);
+            createCell(row, columnCount++, record.getStatusDone(), style);
+            createCell(row, columnCount++, record.getStatusClosed(), style);
             createCell(row, columnCount++, record.getType(), style);
             createCell(row, columnCount++, record.getName(), style);
             createCell(row, columnCount++, record.getEpic(), style);
+            createCell(row, columnCount++, record.getEpicProjectConsumer(), style);
             createCell(row, columnCount++, record.getTaskInEpic(), style);
             if (rowCount%10 == 0) {
                 System.out.printf("Обработано %d из %d записей%n", rowCount, taskList.size());

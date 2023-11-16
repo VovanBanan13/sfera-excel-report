@@ -30,8 +30,13 @@ public class TaskReportDto {
     private String statusInProgress;
     private String statusAnalyze;
     private String statusTesting;
+    private String statusWaiting;
+    private String statusOnTheQueue;
+    private String statusDone;
+    private String statusClosed;
     private String type;
     private String name;
     private String epic;
+    private String epicProjectConsumer;
     private String taskInEpic;
 }

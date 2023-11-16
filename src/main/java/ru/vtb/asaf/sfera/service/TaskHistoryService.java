@@ -17,8 +17,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -106,12 +108,16 @@ public class TaskHistoryService {
         return resultList.toString();
     }
 
-    public Map<String, String> getAllChangeStatus(TaskHistoryDto history) {
+    public Map<String, String> getAllChangeStatus(TaskHistoryDto history, String currentStatus) {
         Map<String, String> resultList = new HashMap<>();
+        Set<String> contentFilter = new HashSet<>();
+        contentFilter.add("status");
+        contentFilter.add("resolution");
         var result = history.getContent()
                 .stream()
                 .filter(content -> !content.getChanges().isEmpty())
-                .filter(content -> "status".equalsIgnoreCase(content.getChanges().get(0).getCode()))
+                .filter(content -> contentFilter.contains(content.getChanges().get(0).getCode()))
+//                .filter(content -> "status".equalsIgnoreCase(content.getChanges().get(0).getCode()))
                 .collect(Collectors.toList());
 //        System.out.println(result);
         List<TaskHistoryDto.Content> contentList = history.getContent().stream()
@@ -122,10 +128,40 @@ public class TaskHistoryService {
         if (!contentList.isEmpty()) {
             timestamp = contentList.get(0).getTimestamp();
         }
-        return getChangeStatus(result, resultList, null, timestamp);
+
+        Map<String, String> resultMap = getChangeStatus(result, resultList, null, timestamp);
+        return getFinalStatus(result, resultMap, currentStatus);
     }
 
-    private Map<String, String> getChangeStatus(List<TaskHistoryDto.Content> contentList, Map<String, String> resultList, String status, String timestamp) {
+    private Map<String, String> getFinalStatus(List<TaskHistoryDto.Content> contentList,
+                                               Map<String, String> resultList,
+                                               String currentStatus) {
+        if (contentList.isEmpty()) {
+            resultList.put("", "");
+            return resultList;
+        } else {
+            for (int i = contentList.size() - 1; i >=0; i--) {
+                if (currentStatus.equalsIgnoreCase(contentList.get(i).getChanges()
+                        .stream()
+                        .filter(change -> "status".equalsIgnoreCase(change.getCode()))
+                        .map(change -> change.getAfter().getValues().get(0).getValue())
+                        .findFirst().orElse(""))) {
+                    String timestampContent = contentList.get(contentList.size() - 1).getTimestamp();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    Date now = new Date();
+                    String currentDate = dateFormat.format(now);
+                    resultList.put(currentStatus, String.format("%s -> %s за %s дней", currentStatus, "now", getCompareDate(currentDate, timestampContent)));
+                    break;
+                }
+            }
+        }
+        return resultList;
+    }
+
+    private Map<String, String> getChangeStatus(List<TaskHistoryDto.Content> contentList,
+                                                Map<String, String> resultList,
+                                                String status,
+                                                String timestamp) {
         if (contentList.isEmpty()) {
             resultList.put("", "");
             return resultList;
@@ -134,10 +170,21 @@ public class TaskHistoryService {
                 if (status == null) {
                     status = content.getChanges().get(0).getBefore().getValues().get(0).getValue();
                 }
-                if (status.equalsIgnoreCase(content.getChanges().get(0).getBefore().getValues().get(0).getValue())) {
+                if (status.equalsIgnoreCase(content.getChanges()
+                        .stream()
+                        .filter(change -> "status".equalsIgnoreCase(change.getCode()))
+                        .map(change -> change.getBefore().getValues().get(0).getValue())
+                        .findFirst().orElse(""))) {
                     String timestampContent = content.getTimestamp();
-                    String afterStatus = content.getChanges().get(0).getAfter().getValues().get(0).getValue();
-                    content.getChanges().get(0).getBefore().getValues().get(0).setValue("");
+                    String afterStatus = content.getChanges()
+                            .stream()
+                            .filter(change -> "status".equalsIgnoreCase(change.getCode()))
+                            .map(change -> change.getAfter().getValues().get(0).getValue())
+                            .findFirst().orElse("unknown");
+                    content.getChanges()
+                            .stream()
+                            .filter(change -> "status".equalsIgnoreCase(change.getCode()))
+                            .forEach(change -> change.getBefore().getValues().get(0).setValue(""));
                     resultList.put(status, String.format("%s -> %s за %s дней", status, afterStatus, getCompareDate(timestampContent, timestamp)));
 //                    System.out.printf("%s -> %s за %s дней\n", status, afterStatus, getCompareDate(timestampContent, timestamp));
                     getChangeStatus(contentList, resultList, afterStatus, timestampContent);

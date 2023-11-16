@@ -105,12 +105,13 @@ public class TaskService {
         if (responseEntity.getBody() != null) {
 //            System.out.println(TaskReportMapper.toTaskReport(responseEntity.getBody()));
             TaskHistoryDto taskHistoryDto = taskHistoryService.getHistoryInfo(requestEntity, taskName);
-            Map<String, String> statusHistory = taskHistoryService.getAllChangeStatus(taskHistoryDto);
+            Map<String, String> statusHistory = taskHistoryService.getAllChangeStatus(taskHistoryDto, responseEntity.getBody().getStatus());
             String dueDateHistory = taskHistoryService.getAllChangeDueDate(taskHistoryDto);
             String endDate = taskHistoryService.getEndDate(taskHistoryDto);
             String assigneeHistory = taskHistoryService.getAllChangeAssignee(taskHistoryDto);
             String projectConsumer = projectConsumerService.getProjectConsumerName(requestEntity, responseEntity.getBody());
             String epicNumber = epicService.getEpicNumber(requestEntity, taskName);
+            String epicProjectConsumer = projectConsumerService.getProjectConsumerName(requestEntity, epicNumber);
             String taskInEpic = getRdsFromEpic(requestEntity, epicNumber);
             return TaskReportMapper
                     .toTaskReport(
@@ -121,6 +122,7 @@ public class TaskService {
                             assigneeHistory,
                             projectConsumer,
                             epicNumber,
+                            epicProjectConsumer,
                             taskInEpic);
         }
         return null;
@@ -134,7 +136,11 @@ public class TaskService {
                         .stream()
                         .filter(entity -> "rds".equalsIgnoreCase(entity.getEntity().getType()))
                         .map(entity -> entity.getEntity().getNumber())
-                        .collect(Collectors.toList()).toString();
+                        .collect(Collectors.toList())
+                        .toString()
+                        .replace("[", "('")
+                        .replace("]", "')")
+                        .replaceAll(", ", "', '");
             }
         }
         return "";

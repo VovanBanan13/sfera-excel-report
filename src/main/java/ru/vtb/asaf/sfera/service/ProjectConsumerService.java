@@ -11,6 +11,8 @@ import ru.vtb.asaf.sfera.dto.ProjectConsumerDto;
 import ru.vtb.asaf.sfera.dto.TaskDto;
 import ru.vtb.asaf.sfera.util.Constant;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +45,16 @@ public class ProjectConsumerService {
         } else {
             return "";
         }
+    }
+
+    public String getProjectConsumerName(HttpEntity<String> requestEntity, String taskName) throws URISyntaxException {
+        if (!taskName.isEmpty()) {
+            ResponseEntity<TaskDto> responseEntity = restTemplate.exchange(new URI(Constant.TASK_GET_URL+taskName), HttpMethod.GET, requestEntity, TaskDto.class);
+            if (responseEntity.getBody() != null) {
+                return getProjectConsumerName(requestEntity, responseEntity.getBody());
+            }
+        }
+        return "";
     }
 
     private static String getValueNotNull(String value) {

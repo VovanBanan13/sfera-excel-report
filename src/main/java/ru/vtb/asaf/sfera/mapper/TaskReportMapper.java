@@ -24,6 +24,7 @@ public final class TaskReportMapper {
             String assigneeHistory,
             String projectConsumer,
             String epicNumber,
+            String epicProjectConsumer,
             String taskInEpic
     ) {
         String label = getLabel(task);
@@ -58,15 +59,32 @@ public final class TaskReportMapper {
                 .dueDate(getValueNotNull(task.getDueDate()))
                 .dueDateHistory(dueDateHistory)
                 .statusHistory(getDateTimeAfterCreate(statusHistory.toString(), getValueNotNull(task.getCreateDate())))
-                .statusCreated(getNumber(getValueNotNull(statusHistory.get("created"))))
+                .statusCreated(getNumber(getValueStatus(statusHistory.get("created"), getValueNotNull(task.getCreateDate()))))
+//                .statusCreated(getNumber(getValueNotNull(statusHistory.get("created"))))
                 .statusInProgress(getNumber(getValueNotNull(statusHistory.get("inProgress"))))
                 .statusAnalyze(getNumber(getValueNotNull(statusHistory.get("analysis"))))
                 .statusTesting(getNumber(getValueNotNull(statusHistory.get("testing"))))
+                .statusWaiting(getNumber(getValueNotNull(statusHistory.get("waiting"))))
+                .statusOnTheQueue(getNumber(getValueNotNull(statusHistory.get("onTheQueue"))))
+                .statusDone(getNumber(getValueNotNull(statusHistory.get("done"))))
+                .statusClosed(getNumber(getValueNotNull(statusHistory.get("closed"))))
                 .type(getValueNotNull(task.getType()))
                 .name(getValueNotNull(task.getName()))
                 .epic(epicNumber)
+                .epicProjectConsumer(epicProjectConsumer)
                 .taskInEpic(taskInEpic)
                 .build();
+    }
+
+    private static String getValueStatus(String value, String createDate) {
+        if (value != null) {
+            return value;
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date now = new Date();
+            String currentDate = dateFormat.format(now);
+            return String.format("%s", getCompareDate(currentDate, createDate));
+        }
     }
 
     private static String getDateTimeAfterCreate(String statusHistory, String createDate) {
