@@ -6,7 +6,7 @@
 
     <groupId>ru.vtb.asaf</groupId>
     <artifactId>sfera-excel-report</artifactId>
-    <version>1.6</version>
+    <version>1.7</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

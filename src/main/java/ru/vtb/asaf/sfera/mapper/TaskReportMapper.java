@@ -31,6 +31,7 @@ public final class TaskReportMapper {
         String component = getComponent(task);
         String assignee = getAssignee(task);
         String owner = getOwner(task);
+        String relatedEntities = getRelatedEntities(task);
 
         return TaskReportDto.builder()
                 .number(getValueNotNull(task.getNumber()))
@@ -73,6 +74,7 @@ public final class TaskReportMapper {
                 .epic(epicNumber)
                 .epicProjectConsumer(epicProjectConsumer)
                 .taskInEpic(taskInEpic)
+                .relatedEntities(relatedEntities)
                 .build();
     }
 
@@ -162,6 +164,23 @@ public final class TaskReportMapper {
                     getValueNotNull(task.getOwner().getPatronymic()));
         }
         return owner;
+    }
+
+    private static String getRelatedEntities(TaskDto task) {
+        String related;
+        if (task.getRelatedEntities() == null) {
+            related = "";
+        } else {
+            related = task.getRelatedEntities()
+                    .stream()
+                    .map(relatedEntity -> relatedEntity.getEntity().getNumber())
+                    .collect(Collectors.toList())
+                    .toString()
+                    .replace("[", "('")
+                    .replace("]", "')")
+                    .replaceAll(", ", "', '");
+        }
+        return related;
     }
 
     private static String getValueNotNull(String value) {

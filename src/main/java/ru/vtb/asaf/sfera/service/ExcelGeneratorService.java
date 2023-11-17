@@ -75,6 +75,7 @@ public class ExcelGeneratorService {
         createCell(row, 26, "Эпик", style);
         createCell(row, 27, "Проект эпика", style);
         createCell(row, 28, "RDS эпика", style);
+        createCell(row, 29, "Связи задачи", style);
     }
 
     private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
@@ -130,6 +131,7 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, record.getEpic(), style);
             createCell(row, columnCount++, record.getEpicProjectConsumer(), style);
             createCell(row, columnCount++, record.getTaskInEpic(), style);
+            createCell(row, columnCount++, record.getRelatedEntities(), style);
             if (rowCount%10 == 0) {
                 System.out.printf("Обработано %d из %d записей%n", rowCount, taskList.size());
             }

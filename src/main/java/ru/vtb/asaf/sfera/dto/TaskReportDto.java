@@ -39,4 +39,5 @@ public class TaskReportDto {
     private String epic;
     private String epicProjectConsumer;
     private String taskInEpic;
+    private String relatedEntities;
 }
