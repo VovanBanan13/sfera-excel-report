@@ -73,13 +73,12 @@ public class ExcelGeneratorService {
         createCell(row, 24, "Закрыто", style);
         createCell(row, 25, "Прогресс задачи (план)", style);
         createCell(row, 26, "Прогресс задачи (факт)", style);
-        createCell(row, 27, "Закрыто", style);
-        createCell(row, 28, "Тип", style);
-        createCell(row, 29, "Название", style);
-        createCell(row, 30, "Эпик", style);
-        createCell(row, 31, "Проект эпика", style);
-        createCell(row, 32, "RDS эпика", style);
-        createCell(row, 33, "Связи задачи", style);
+        createCell(row, 27, "Тип", style);
+        createCell(row, 28, "Название", style);
+        createCell(row, 29, "Эпик", style);
+        createCell(row, 30, "Проект эпика", style);
+        createCell(row, 31, "RDS эпика", style);
+        createCell(row, 32, "Связи задачи", style);
     }
 
     private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
