@@ -168,7 +168,10 @@ public class TaskHistoryService {
         } else {
             for (TaskHistoryDto.Content content : contentList) {
                 if (status == null) {
-                    status = content.getChanges().get(0).getBefore().getValues().get(0).getValue();
+                    status = content.getChanges().stream()
+                            .filter(change -> "status".equalsIgnoreCase(change.getCode()))
+                            .map(change -> change.getBefore().getValues().get(0).getValue())
+                            .findFirst().orElse("");
                 }
                 if (status.equalsIgnoreCase(content.getChanges()
                         .stream()

@@ -61,21 +61,22 @@ public class ExcelGeneratorService {
         createCell(row, 12, "Смена срока исполнения", style);
         createCell(row, 13, "Обновлено", style);
         createCell(row, 14, "Дата завершения", style);
-        createCell(row, 15, "Смена статуса", style);
-        createCell(row, 16, "Создано", style);
-        createCell(row, 17, "В работе", style);
-        createCell(row, 18, "Анализ", style);
-        createCell(row, 19, "Тестирование", style);
-        createCell(row, 20, "В ожидании", style);
-        createCell(row, 21, "В очереди", style);
-        createCell(row, 22, "Выполнено", style);
-        createCell(row, 23, "Закрыто", style);
-        createCell(row, 24, "Тип", style);
-        createCell(row, 25, "Название", style);
-        createCell(row, 26, "Эпик", style);
-        createCell(row, 27, "Проект эпика", style);
-        createCell(row, 28, "RDS эпика", style);
-        createCell(row, 29, "Связи задачи", style);
+        createCell(row, 15, "Дата завершения работ", style);
+        createCell(row, 16, "Смена статуса", style);
+        createCell(row, 17, "Создано", style);
+        createCell(row, 18, "В работе", style);
+        createCell(row, 19, "Анализ", style);
+        createCell(row, 20, "Тестирование", style);
+        createCell(row, 21, "В ожидании", style);
+        createCell(row, 22, "В очереди", style);
+        createCell(row, 23, "Выполнено", style);
+        createCell(row, 24, "Закрыто", style);
+        createCell(row, 25, "Тип", style);
+        createCell(row, 26, "Название", style);
+        createCell(row, 27, "Эпик", style);
+        createCell(row, 28, "Проект эпика", style);
+        createCell(row, 29, "RDS эпика", style);
+        createCell(row, 30, "Связи задачи", style);
     }
 
     private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
@@ -117,6 +118,7 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, record.getDueDateHistory(), style);
             createCell(row, columnCount++, record.getUpdateDate(), style);
             createCell(row, columnCount++, record.getEndDate(), style);
+            createCell(row, columnCount++, record.getImplementationEndDate(), style);
             createCell(row, columnCount++, record.getStatusHistory(), style);
             createCell(row, columnCount++, record.getStatusCreated(), style);
             createCell(row, columnCount++, record.getStatusInProgress(), style);

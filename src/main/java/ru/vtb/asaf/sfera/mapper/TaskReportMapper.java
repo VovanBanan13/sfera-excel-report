@@ -15,6 +15,7 @@ public final class TaskReportMapper {
 
     private static final String STREAM_CONSUMER = "streamConsumer";
     private static final String STREAM_EXECUTOR = "streamExecutor";
+    private static final String IMPLEMENTATION_END_DATE = "implementationEndDate";
 
     public static TaskReportDto toTaskReport(
             TaskDto task,
@@ -57,6 +58,12 @@ public final class TaskReportMapper {
                 .createDate(getValueNotNull(task.getCreateDate()))
                 .updateDate(getValueNotNull(task.getUpdateDate()))
                 .endDate(endDate)
+                .implementationEndDate(getValueNotNull(task.getCustomFieldsValues()
+                        .stream()
+                        .filter(f -> IMPLEMENTATION_END_DATE.equals(f.getCode()))
+                        .map(TaskDto.CustomFieldsValues::getValue)
+                        .findFirst()
+                        .orElse(null)))
                 .dueDate(getValueNotNull(task.getDueDate()))
                 .dueDateHistory(dueDateHistory)
                 .statusHistory(getDateTimeAfterCreate(statusHistory.toString(), getValueNotNull(task.getCreateDate())))
