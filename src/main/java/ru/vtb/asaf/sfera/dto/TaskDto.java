@@ -22,6 +22,8 @@ public class TaskDto {
     private String createDate;
     private String updateDate;
     private String dueDate;
+    private Integer estimation;
+    private List<Worklog> worklog;
     private List<RelatedEntity> relatedEntities;
     private String type;
     private String name;
@@ -79,5 +81,13 @@ public class TaskDto {
         private String code;
         private String name;
         private String value;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Worklog {
+        private Integer spent;
     }
 }

@@ -28,20 +28,14 @@ public final class TaskReportMapper {
             String epicProjectConsumer,
             String taskInEpic
     ) {
-        String label = getLabel(task);
-        String component = getComponent(task);
-        String assignee = getAssignee(task);
-        String owner = getOwner(task);
-        String relatedEntities = getRelatedEntities(task);
-
         return TaskReportDto.builder()
                 .number(getValueNotNull(task.getNumber()))
                 .status(getValueNotNull(task.getStatus()))
-                .label(label)
-                .component(component)
-                .assignee(assignee)
+                .label(getLabel(task))
+                .component(getComponent(task))
+                .assignee(getAssignee(task))
                 .assigneeHistory(assigneeHistory)
-                .owner(owner)
+                .owner(getOwner(task))
                 .streamConsumer(getValueNotNull(task.getCustomFieldsValues()
                         .stream()
                         .filter(f -> STREAM_CONSUMER.equals(f.getCode()))
@@ -76,12 +70,14 @@ public final class TaskReportMapper {
                 .statusOnTheQueue(getNumber(getValueNotNull(statusHistory.get("onTheQueue"))))
                 .statusDone(getNumber(getValueNotNull(statusHistory.get("done"))))
                 .statusClosed(getNumber(getValueNotNull(statusHistory.get("closed"))))
+                .estimation(getDayValueNotNull(task.getEstimation()))
+                .worklogSpent(getWorklogSpent(task))
                 .type(getValueNotNull(task.getType()))
                 .name(getValueNotNull(task.getName()))
                 .epic(epicNumber)
                 .epicProjectConsumer(epicProjectConsumer)
                 .taskInEpic(taskInEpic)
-                .relatedEntities(relatedEntities)
+                .relatedEntities(getRelatedEntities(task))
                 .build();
     }
 
@@ -190,9 +186,30 @@ public final class TaskReportMapper {
         return related;
     }
 
+    private static String getWorklogSpent(TaskDto task) {
+        String spent;
+        if (task.getWorklog() == null) {
+            spent = "";
+        } else {
+            spent = String.valueOf(task.getWorklog()
+                    .stream()
+                    .mapToInt(TaskDto.Worklog::getSpent)
+                    .sum()/3600/8);
+        }
+        return spent;
+    }
+
     private static String getValueNotNull(String value) {
         if (value != null) {
             return value;
+        } else {
+            return "";
+        }
+    }
+
+    private static String getDayValueNotNull(Integer value) {
+        if (value != null) {
+            return String.valueOf(value/3600/8);
         } else {
             return "";
         }

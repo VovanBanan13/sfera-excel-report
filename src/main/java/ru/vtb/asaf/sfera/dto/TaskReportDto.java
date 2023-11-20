@@ -35,6 +35,8 @@ public class TaskReportDto {
     private String statusOnTheQueue;
     private String statusDone;
     private String statusClosed;
+    private String estimation;
+    private String worklogSpent;
     private String type;
     private String name;
     private String epic;
