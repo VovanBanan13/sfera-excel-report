@@ -88,10 +88,12 @@ public class ExcelGeneratorService {
             cell.setCellValue((Integer) valueOfCell);
         } else if (valueOfCell instanceof Long) {
             cell.setCellValue((Long) valueOfCell);
-        } else if (valueOfCell instanceof String) {
-            cell.setCellValue((String) valueOfCell);
-        } else {
+//        } else if (valueOfCell instanceof String) {
+//            cell.setCellValue((String) valueOfCell);
+        } else if (valueOfCell instanceof Boolean) {
             cell.setCellValue((Boolean) valueOfCell);
+        } else {
+            cell.setCellValue((String) valueOfCell);
         }
         cell.setCellStyle(style);
     }

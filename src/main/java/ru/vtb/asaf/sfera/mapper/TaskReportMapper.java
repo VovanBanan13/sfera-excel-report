@@ -186,15 +186,15 @@ public final class TaskReportMapper {
         return related;
     }
 
-    private static String getWorklogSpent(TaskDto task) {
-        String spent;
+    private static Integer getWorklogSpent(TaskDto task) {
+        Integer spent;
         if (task.getWorklog() == null) {
-            spent = "";
+            spent = null;
         } else {
-            spent = String.valueOf(task.getWorklog()
+            spent = task.getWorklog()
                     .stream()
                     .mapToInt(TaskDto.Worklog::getSpent)
-                    .sum()/3600/8);
+                    .sum()/3600/8;
         }
         return spent;
     }
@@ -207,15 +207,19 @@ public final class TaskReportMapper {
         }
     }
 
-    private static String getDayValueNotNull(Integer value) {
+    private static Integer getDayValueNotNull(Integer value) {
         if (value != null) {
-            return String.valueOf(value/3600/8);
+            return value/3600/8;
         } else {
-            return "";
+            return null;
         }
     }
 
-    private static String getNumber(String value) {
-        return value.replaceAll("\\D", "");
+    private static Integer getNumber(String value) {
+        value = value.replaceAll("\\D", "");
+        if (value.isEmpty()) {
+            return null;
+        }
+        return Integer.parseInt(value);
     }
 }
